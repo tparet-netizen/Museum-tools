@@ -5,7 +5,7 @@ export async function GET() {
   const supabase = createAdminClient();
   const { data, error } = await supabase
     .from("projects")
-    .select("*")
+    .select("*, location:locations(*)")
     .order("start_date", { ascending: false });
 
   if (error) {
@@ -16,7 +16,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  const { name, description, start_date, end_date, status } = body ?? {};
+  const { name, description, start_date, end_date, status, location_id } = body ?? {};
 
   if (!name || !start_date || !end_date) {
     return NextResponse.json(
@@ -28,8 +28,8 @@ export async function POST(request: NextRequest) {
   const supabase = createAdminClient();
   const { data, error } = await supabase
     .from("projects")
-    .insert({ name, description, start_date, end_date, status })
-    .select()
+    .insert({ name, description, start_date, end_date, status, location_id: location_id || null })
+    .select("*, location:locations(*)")
     .single();
 
   if (error) {

@@ -21,6 +21,15 @@ export interface Case {
   updated_at: string;
 }
 
+export interface Location {
+  id: string;
+  name: string;
+  description: string | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Project {
   id: string;
   name: string;
@@ -28,6 +37,8 @@ export interface Project {
   start_date: string;
   end_date: string;
   status: ProjectStatus;
+  location_id: string | null;
+  location: Location | null;
   created_at: string;
   updated_at: string;
 }

@@ -14,7 +14,7 @@ export default async function ProjectsPage() {
   const supabase = await createClient();
   const { data: projects } = await supabase
     .from("projects")
-    .select("*")
+    .select("*, location:locations(*)")
     .order("start_date", { ascending: false });
 
   return (
@@ -40,6 +40,7 @@ export default async function ProjectsPage() {
               <div className="font-medium">{p.name}</div>
               <div className="text-sm text-black/60 dark:text-white/60">
                 {p.start_date} &rarr; {p.end_date}
+                {p.location ? ` · ${p.location.name}` : ""}
               </div>
             </div>
             <span

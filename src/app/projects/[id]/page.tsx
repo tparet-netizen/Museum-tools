@@ -15,7 +15,7 @@ export default async function ProjectDetailPage({
 
   const { data: project } = await supabase
     .from("projects")
-    .select("*")
+    .select("*, location:locations(*)")
     .eq("id", id)
     .single();
 
@@ -35,6 +35,7 @@ export default async function ProjectDetailPage({
         <h1 className="text-xl font-semibold tracking-tight">{project.name}</h1>
         <p className="mt-1 text-sm text-black/60 dark:text-white/60">
           {project.start_date} &rarr; {project.end_date} &middot; {project.status}
+          {project.location ? <> &middot; {project.location.name}</> : ""}
         </p>
         {project.description && (
           <p className="mt-3 max-w-2xl text-sm">{project.description}</p>

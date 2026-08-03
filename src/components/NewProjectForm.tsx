@@ -1,12 +1,20 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import type { Location } from "@/lib/types";
 
 export function NewProjectForm() {
   const router = useRouter();
+  const [locations, setLocations] = useState<Location[]>([]);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/locations")
+      .then((res) => res.json())
+      .then((body) => setLocations(body.locations ?? []));
+  }, []);
 
   return (
     <form
@@ -23,6 +31,7 @@ export function NewProjectForm() {
             description: form.get("description") || null,
             start_date: form.get("start_date"),
             end_date: form.get("end_date"),
+            location_id: form.get("location_id") || null,
           }),
         });
         setPending(false);
@@ -37,6 +46,20 @@ export function NewProjectForm() {
     >
       <Field label="Name" name="name" required placeholder="Ancient Trade Routes" />
       <Field label="Description" name="description" placeholder="Optional" />
+      <label className="flex flex-col gap-1 text-sm">
+        <span className="text-black/70 dark:text-white/70">Location</span>
+        <select
+          name="location_id"
+          className="rounded-md border border-black/10 px-3 py-2 dark:border-white/15 dark:bg-transparent"
+        >
+          <option value="">No location set</option>
+          {locations.map((l) => (
+            <option key={l.id} value={l.id}>
+              {l.name}
+            </option>
+          ))}
+        </select>
+      </label>
       <div className="grid grid-cols-2 gap-3">
         <Field label="Start date" name="start_date" type="date" required />
         <Field label="End date" name="end_date" type="date" required />

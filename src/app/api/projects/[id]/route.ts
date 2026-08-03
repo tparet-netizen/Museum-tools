@@ -10,7 +10,7 @@ export async function GET(
 
   const [{ data: project, error: projectError }, { data: bookings, error: bookingsError }] =
     await Promise.all([
-      supabase.from("projects").select("*").eq("id", id).single(),
+      supabase.from("projects").select("*, location:locations(*)").eq("id", id).single(),
       supabase
         .from("bookings")
         .select("*, case:cases(*)")
