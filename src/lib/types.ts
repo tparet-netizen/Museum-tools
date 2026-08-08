@@ -17,6 +17,34 @@ export interface Case {
   depth_cm: number | null;
   description: string | null;
   is_active: boolean;
+  max_weight_kg: number | null;
+  is_climate_controlled: boolean;
+  is_uv_filtered: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ObjectGroup {
+  id: string;
+  name: string;
+  description: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface MuseumObject {
+  id: string;
+  name: string;
+  description: string | null;
+  width_cm: number;
+  height_cm: number;
+  depth_cm: number;
+  weight_kg: number | null;
+  orientation_fixed: boolean;
+  requires_climate_control: boolean;
+  requires_uv_filtered: boolean;
+  group_id: string | null;
+  group: ObjectGroup | null;
   created_at: string;
   updated_at: string;
 }

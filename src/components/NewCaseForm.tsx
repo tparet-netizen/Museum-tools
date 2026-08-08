@@ -35,6 +35,12 @@ export function NewCaseForm() {
             name: form.get("name"),
             location: form.get("location") || null,
             description: form.get("description") || null,
+            width_cm: form.get("width_cm") ? Number(form.get("width_cm")) : null,
+            height_cm: form.get("height_cm") ? Number(form.get("height_cm")) : null,
+            depth_cm: form.get("depth_cm") ? Number(form.get("depth_cm")) : null,
+            max_weight_kg: form.get("max_weight_kg") ? Number(form.get("max_weight_kg")) : null,
+            is_climate_controlled: form.get("is_climate_controlled") === "on",
+            is_uv_filtered: form.get("is_uv_filtered") === "on",
           }),
         });
         setPending(false);
@@ -54,6 +60,20 @@ export function NewCaseForm() {
         <Field label="Location" name="location" placeholder="Gallery 1" />
         <Field label="Description" name="description" placeholder="Optional" />
       </div>
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <Field label="Width (cm)" name="width_cm" type="number" placeholder="Interior" />
+        <Field label="Height (cm)" name="height_cm" type="number" placeholder="Interior" />
+        <Field label="Depth (cm)" name="depth_cm" type="number" placeholder="Interior" />
+        <Field label="Max weight (kg)" name="max_weight_kg" type="number" placeholder="Optional" />
+      </div>
+      <label className="flex items-center gap-2 text-sm">
+        <input type="checkbox" name="is_climate_controlled" className="rounded" />
+        <span>Climate controlled</span>
+      </label>
+      <label className="flex items-center gap-2 text-sm">
+        <input type="checkbox" name="is_uv_filtered" className="rounded" />
+        <span>UV filtered</span>
+      </label>
       {error && <p className="text-sm text-red-600">{error}</p>}
       <div className="flex gap-2">
         <button
@@ -80,17 +100,21 @@ function Field({
   name,
   required,
   placeholder,
+  type = "text",
 }: {
   label: string;
   name: string;
   required?: boolean;
   placeholder?: string;
+  type?: string;
 }) {
   return (
     <label className="flex flex-col gap-1 text-sm">
       <span className="text-black/70 dark:text-white/70">{label}</span>
       <input
         name={name}
+        type={type}
+        step={type === "number" ? "any" : undefined}
         required={required}
         placeholder={placeholder}
         className="rounded-md border border-black/10 px-3 py-2 dark:border-white/15 dark:bg-transparent"

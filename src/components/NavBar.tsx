@@ -13,6 +13,9 @@ export function NavBar() {
         <Link href="/projects" className="text-sm hover:underline">
           Projects
         </Link>
+        <Link href="/objects" className="text-sm hover:underline">
+          Objects
+        </Link>
       </nav>
     </header>
   );

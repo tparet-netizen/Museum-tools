@@ -21,8 +21,18 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  const { code, name, location, width_cm, height_cm, depth_cm, description } =
-    body ?? {};
+  const {
+    code,
+    name,
+    location,
+    width_cm,
+    height_cm,
+    depth_cm,
+    description,
+    max_weight_kg,
+    is_climate_controlled,
+    is_uv_filtered,
+  } = body ?? {};
 
   if (!code || !name) {
     return NextResponse.json(
@@ -34,7 +44,18 @@ export async function POST(request: NextRequest) {
   const supabase = createAdminClient();
   const { data, error } = await supabase
     .from("cases")
-    .insert({ code, name, location, width_cm, height_cm, depth_cm, description })
+    .insert({
+      code,
+      name,
+      location,
+      width_cm: width_cm || null,
+      height_cm: height_cm || null,
+      depth_cm: depth_cm || null,
+      description,
+      max_weight_kg: max_weight_kg || null,
+      is_climate_controlled: !!is_climate_controlled,
+      is_uv_filtered: !!is_uv_filtered,
+    })
     .select()
     .single();
 

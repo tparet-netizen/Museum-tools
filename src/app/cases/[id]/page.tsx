@@ -48,7 +48,16 @@ export default async function CaseDetailPage({
           {caseRow.width_cm && <div>W {caseRow.width_cm}cm</div>}
           {caseRow.height_cm && <div>H {caseRow.height_cm}cm</div>}
           {caseRow.depth_cm && <div>D {caseRow.depth_cm}cm</div>}
+          {caseRow.max_weight_kg && <div>Max {caseRow.max_weight_kg}kg</div>}
         </dl>
+        <div className="mt-3 flex flex-wrap gap-1.5 text-xs">
+          {caseRow.is_climate_controlled && (
+            <span className="rounded bg-black/10 px-1.5 py-0.5 dark:bg-white/10">Climate controlled</span>
+          )}
+          {caseRow.is_uv_filtered && (
+            <span className="rounded bg-black/10 px-1.5 py-0.5 dark:bg-white/10">UV filtered</span>
+          )}
+        </div>
       </div>
 
       <section>
