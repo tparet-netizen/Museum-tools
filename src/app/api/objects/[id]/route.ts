@@ -9,7 +9,7 @@ export async function GET(
   const supabase = createAdminClient();
   const { data, error } = await supabase
     .from("objects")
-    .select("*, group:object_groups(*)")
+    .select("*, group:object_groups(*), project:projects(*)")
     .eq("id", id)
     .single();
 

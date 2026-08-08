@@ -15,9 +15,21 @@ type MatchResult = {
   isMatch: boolean;
 };
 
-export function MatchCasesPanel({ objectId, groupId }: { objectId?: string; groupId?: string }) {
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+export function MatchCasesPanel({
+  objectId,
+  groupId,
+  defaultStartDate,
+  defaultEndDate,
+  datesFromProjectName,
+}: {
+  objectId?: string;
+  groupId?: string;
+  defaultStartDate?: string;
+  defaultEndDate?: string;
+  datesFromProjectName?: string;
+}) {
+  const [startDate, setStartDate] = useState(defaultStartDate ?? "");
+  const [endDate, setEndDate] = useState(defaultEndDate ?? "");
   const [results, setResults] = useState<MatchResult[] | null>(null);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -73,7 +85,9 @@ export function MatchCasesPanel({ objectId, groupId }: { objectId?: string; grou
           {pending ? "Searching..." : "Find matching cases"}
         </button>
         <p className="text-xs text-black/50 dark:text-white/50">
-          Leave dates blank to check fit/requirements only, without checking availability.
+          {datesFromProjectName
+            ? `Dates defaulted from "${datesFromProjectName}" — adjust if only part of that run is needed.`
+            : "Leave dates blank to check fit/requirements only, without checking availability."}
         </p>
       </div>
 

@@ -45,6 +45,8 @@ export interface MuseumObject {
   requires_uv_filtered: boolean;
   group_id: string | null;
   group: ObjectGroup | null;
+  project_id: string | null;
+  project: Project | null;
   created_at: string;
   updated_at: string;
 }

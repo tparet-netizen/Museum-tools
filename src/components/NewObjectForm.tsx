@@ -2,11 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import type { ObjectGroup } from "@/lib/types";
+import type { ObjectGroup, Project } from "@/lib/types";
 
 export function NewObjectForm() {
   const router = useRouter();
   const [groups, setGroups] = useState<ObjectGroup[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -14,6 +15,9 @@ export function NewObjectForm() {
     fetch("/api/object-groups")
       .then((res) => res.json())
       .then((body) => setGroups(body.groups ?? []));
+    fetch("/api/projects")
+      .then((res) => res.json())
+      .then((body) => setProjects(body.projects ?? []));
   }, []);
 
   return (
@@ -55,6 +59,7 @@ export function NewObjectForm() {
             requires_climate_control: form.get("requires_climate_control") === "on",
             requires_uv_filtered: form.get("requires_uv_filtered") === "on",
             group_id: groupId,
+            project_id: form.get("project_id") || null,
           }),
         });
         setPending(false);
@@ -109,6 +114,24 @@ export function NewObjectForm() {
         name="new_group_name"
         placeholder="Overrides the dropdown above if filled in"
       />
+
+      <label className="flex flex-col gap-1 text-sm">
+        <span className="text-black/70 dark:text-white/70">Needed for project (optional)</span>
+        <select
+          name="project_id"
+          className="rounded-md border border-black/10 px-3 py-2 dark:border-white/15 dark:bg-transparent"
+        >
+          <option value="">No project assigned</option>
+          {projects.map((p) => (
+            <option key={p.id} value={p.id}>
+              {p.name} ({p.start_date} &rarr; {p.end_date})
+            </option>
+          ))}
+        </select>
+        <span className="text-xs text-black/50 dark:text-white/50">
+          When set, the case matcher will default the search dates to this project&apos;s dates.
+        </span>
+      </label>
 
       {error && <p className="text-sm text-red-600">{error}</p>}
       <button

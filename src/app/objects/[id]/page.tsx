@@ -13,7 +13,7 @@ export default async function ObjectDetailPage({
 
   const { data: object } = await supabase
     .from("objects")
-    .select("*, group:object_groups(*)")
+    .select("*, group:object_groups(*), project:projects(*)")
     .eq("id", id)
     .single();
 
@@ -35,6 +35,15 @@ export default async function ObjectDetailPage({
             </Link>
           </p>
         )}
+        {object.project && (
+          <p className="mt-1 text-sm">
+            Needed for project:{" "}
+            <Link href={`/projects/${object.project.id}`} className="hover:underline">
+              {object.project.name}
+            </Link>{" "}
+            ({object.project.start_date} &rarr; {object.project.end_date})
+          </p>
+        )}
         {object.description && <p className="mt-3 max-w-2xl text-sm">{object.description}</p>}
         <div className="mt-3 flex flex-wrap gap-1.5 text-xs">
           {object.orientation_fixed && (
@@ -53,7 +62,12 @@ export default async function ObjectDetailPage({
         <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-black/60 dark:text-white/60">
           Find a case
         </h2>
-        <MatchCasesPanel objectId={object.id} />
+        <MatchCasesPanel
+          objectId={object.id}
+          defaultStartDate={object.project?.start_date}
+          defaultEndDate={object.project?.end_date}
+          datesFromProjectName={object.project?.name}
+        />
       </section>
     </div>
   );

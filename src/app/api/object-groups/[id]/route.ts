@@ -10,7 +10,7 @@ export async function GET(
 
   const [{ data: group, error: groupError }, { data: objects, error: objectsError }] = await Promise.all([
     supabase.from("object_groups").select("*").eq("id", id).single(),
-    supabase.from("objects").select("*").eq("group_id", id).order("name"),
+    supabase.from("objects").select("*, project:projects(*)").eq("group_id", id).order("name"),
   ]);
 
   if (groupError) {

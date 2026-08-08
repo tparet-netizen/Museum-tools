@@ -5,7 +5,10 @@ export async function GET(request: NextRequest) {
   const groupId = request.nextUrl.searchParams.get("group_id");
   const supabase = createAdminClient();
 
-  let query = supabase.from("objects").select("*, group:object_groups(*)").order("name");
+  let query = supabase
+    .from("objects")
+    .select("*, group:object_groups(*), project:projects(*)")
+    .order("name");
   if (groupId) query = query.eq("group_id", groupId);
 
   const { data, error } = await query;
@@ -28,6 +31,7 @@ export async function POST(request: NextRequest) {
     requires_climate_control,
     requires_uv_filtered,
     group_id,
+    project_id,
   } = body ?? {};
 
   if (!name || !width_cm || !height_cm || !depth_cm) {
@@ -51,8 +55,9 @@ export async function POST(request: NextRequest) {
       requires_climate_control: !!requires_climate_control,
       requires_uv_filtered: !!requires_uv_filtered,
       group_id: group_id || null,
+      project_id: project_id || null,
     })
-    .select("*, group:object_groups(*)")
+    .select("*, group:object_groups(*), project:projects(*)")
     .single();
 
   if (error) {

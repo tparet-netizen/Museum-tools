@@ -6,7 +6,7 @@ export default async function ObjectsPage() {
   const supabase = await createClient();
 
   const [{ data: objects }, { data: groups }] = await Promise.all([
-    supabase.from("objects").select("*, group:object_groups(*)").order("name"),
+    supabase.from("objects").select("*, group:object_groups(*), project:projects(*)").order("name"),
     supabase.from("object_groups").select("*").order("name"),
   ]);
 
@@ -75,6 +75,7 @@ export default async function ObjectsPage() {
                 <div className="text-sm text-black/60 dark:text-white/60">
                   {o.width_cm} &times; {o.height_cm} &times; {o.depth_cm} cm
                   {o.weight_kg ? ` · ${o.weight_kg} kg` : ""}
+                  {o.project ? ` · ${o.project.name}` : ""}
                 </div>
               </div>
             </Link>

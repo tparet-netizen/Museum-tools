@@ -17,15 +17,31 @@ export default async function GroupDetailPage({
 
   const { data: objects } = await supabase
     .from("objects")
-    .select("*")
+    .select("*, project:projects(*)")
     .eq("group_id", id)
     .order("name");
+
+  const members = (objects ?? []) as MuseumObject[];
+  // Only default the search dates from a project if every object in the
+  // group is assigned to the same one - a mixed group has no single answer.
+  const firstProjectId = members[0]?.project_id ?? null;
+  const allSameProject = members.length > 0 && members.every((o) => o.project_id === firstProjectId);
+  const sharedProject = allSameProject && firstProjectId ? members[0].project : null;
 
   return (
     <div className="flex flex-col gap-8">
       <div>
         <h1 className="text-xl font-semibold tracking-tight">{group.name}</h1>
         {group.description && <p className="mt-1 text-sm text-black/60 dark:text-white/60">{group.description}</p>}
+        {sharedProject && (
+          <p className="mt-1 text-sm">
+            Needed for project:{" "}
+            <Link href={`/projects/${sharedProject.id}`} className="hover:underline">
+              {sharedProject.name}
+            </Link>{" "}
+            ({sharedProject.start_date} &rarr; {sharedProject.end_date})
+          </p>
+        )}
       </div>
 
       <section>
@@ -63,7 +79,12 @@ export default async function GroupDetailPage({
           single case that fits all of them together. This is an approximation, not a guaranteed physical
           layout.
         </p>
-        <MatchCasesPanel groupId={group.id} />
+        <MatchCasesPanel
+          groupId={group.id}
+          defaultStartDate={sharedProject?.start_date}
+          defaultEndDate={sharedProject?.end_date}
+          datesFromProjectName={sharedProject?.name}
+        />
       </section>
     </div>
   );
