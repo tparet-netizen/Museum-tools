@@ -27,8 +27,10 @@ case pages can show full booking history, not just current bookings.
 ## Setup
 
 1. Create a free [Supabase](https://supabase.com) project.
-2. In the Supabase SQL editor, run `supabase/migrations/0001_init.sql`.
-   Optionally run `supabase/seed.sql` for sample data.
+2. In the Supabase SQL editor, run each file in `supabase/migrations/` in
+   order (0001, 0002, ...). Optionally run `supabase/seed.sql` for sample
+   data. See "Automated migrations" below for a way to skip doing this by
+   hand going forward.
 3. Copy `.env.local.example` to `.env.local` and fill in your project's URL
    and keys from Project Settings -> API.
 4. Install dependencies and run the dev server:
@@ -55,6 +57,23 @@ There's no end-user auth yet. Row Level Security is enabled with public
 go through Next.js API routes using the service role key. When staff
 accounts are added, replace the service-role write path with RLS policies
 scoped to authenticated users.
+
+## Automated migrations
+
+`.github/workflows/supabase-migrate.yml` applies everything in
+`supabase/migrations/` automatically whenever a migration file is pushed,
+using the Supabase CLI running on GitHub's infrastructure — no local
+network access or MCP connector required. To enable it, add these repo
+secrets (Settings -> Secrets and variables -> Actions):
+
+| Secret | Where to get it |
+| --- | --- |
+| `SUPABASE_ACCESS_TOKEN` | supabase.com/dashboard/account/tokens (create a personal access token) |
+| `SUPABASE_PROJECT_REF` | The project ref from its URL, e.g. `yyuwzpiskqorzyrhdgul` |
+| `SUPABASE_DB_PASSWORD` | Project Settings -> Database (reset it there if you don't have it saved) |
+
+Without these secrets set, the workflow will fail — that's expected until
+you add them, and it doesn't block anything else.
 
 ## Deployment
 
