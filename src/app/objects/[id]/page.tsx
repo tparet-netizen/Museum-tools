@@ -24,7 +24,7 @@ export default async function ObjectDetailPage({
       <div>
         <h1 className="text-xl font-semibold tracking-tight">{object.name}</h1>
         <p className="mt-1 text-sm text-black/60 dark:text-white/60">
-          {object.width_cm} &times; {object.height_cm} &times; {object.depth_cm} cm
+          {object.width_in} &times; {object.height_in} &times; {object.depth_in} in
           {object.weight_kg ? ` · ${object.weight_kg} kg` : ""}
         </p>
         {object.group && (

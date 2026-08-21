@@ -51,9 +51,9 @@ export function NewObjectForm() {
           body: JSON.stringify({
             name: form.get("name"),
             description: form.get("description") || null,
-            width_cm: Number(form.get("width_cm")),
-            height_cm: Number(form.get("height_cm")),
-            depth_cm: Number(form.get("depth_cm")),
+            width_in: Number(form.get("width_in")),
+            height_in: Number(form.get("height_in")),
+            depth_in: Number(form.get("depth_in")),
             weight_kg: form.get("weight_kg") ? Number(form.get("weight_kg")) : null,
             orientation_fixed: form.get("orientation_fixed") === "on",
             requires_climate_control: form.get("requires_climate_control") === "on",
@@ -76,9 +76,9 @@ export function NewObjectForm() {
       <Field label="Description" name="description" placeholder="Optional" />
 
       <div className="grid grid-cols-3 gap-3">
-        <Field label="Width (cm)" name="width_cm" type="number" required />
-        <Field label="Height (cm)" name="height_cm" type="number" required />
-        <Field label="Depth (cm)" name="depth_cm" type="number" required />
+        <Field label="Width (in)" name="width_in" type="number" required />
+        <Field label="Height (in)" name="height_in" type="number" required />
+        <Field label="Depth (in)" name="depth_in" type="number" required />
       </div>
       <Field label="Weight (kg)" name="weight_kg" type="number" placeholder="Optional" />
 

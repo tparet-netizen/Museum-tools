@@ -58,7 +58,7 @@ export default async function GroupDetailPage({
               <div>
                 <div className="font-medium">{o.name}</div>
                 <div className="text-sm text-black/60 dark:text-white/60">
-                  {o.width_cm} &times; {o.height_cm} &times; {o.depth_cm} cm
+                  {o.width_in} &times; {o.height_in} &times; {o.depth_in} in
                   {o.weight_kg ? ` · ${o.weight_kg} kg` : ""}
                 </div>
               </div>

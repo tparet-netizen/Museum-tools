@@ -23,9 +23,9 @@ export async function POST(request: NextRequest) {
   const {
     name,
     description,
-    width_cm,
-    height_cm,
-    depth_cm,
+    width_in,
+    height_in,
+    depth_in,
     weight_kg,
     orientation_fixed,
     requires_climate_control,
@@ -34,9 +34,9 @@ export async function POST(request: NextRequest) {
     project_id,
   } = body ?? {};
 
-  if (!name || !width_cm || !height_cm || !depth_cm) {
+  if (!name || !width_in || !height_in || !depth_in) {
     return NextResponse.json(
-      { error: "name, width_cm, height_cm and depth_cm are required" },
+      { error: "name, width_in, height_in and depth_in are required" },
       { status: 400 }
     );
   }
@@ -47,9 +47,9 @@ export async function POST(request: NextRequest) {
     .insert({
       name,
       description: description || null,
-      width_cm,
-      height_cm,
-      depth_cm,
+      width_in,
+      height_in,
+      depth_in,
       weight_kg: weight_kg || null,
       orientation_fixed: !!orientation_fixed,
       requires_climate_control: !!requires_climate_control,

@@ -6,9 +6,9 @@ import type { Case, MuseumObject } from "@/lib/types";
 function toTarget(o: MuseumObject): MatchTarget {
   return {
     name: o.name,
-    width_cm: o.width_cm,
-    height_cm: o.height_cm,
-    depth_cm: o.depth_cm,
+    width_in: o.width_in,
+    height_in: o.height_in,
+    depth_in: o.depth_in,
     weight_kg: o.weight_kg,
     orientation_fixed: o.orientation_fixed,
     requires_climate_control: o.requires_climate_control,

@@ -35,9 +35,11 @@ export function NewCaseForm() {
             name: form.get("name"),
             location: form.get("location") || null,
             description: form.get("description") || null,
-            width_cm: form.get("width_cm") ? Number(form.get("width_cm")) : null,
-            height_cm: form.get("height_cm") ? Number(form.get("height_cm")) : null,
-            depth_cm: form.get("depth_cm") ? Number(form.get("depth_cm")) : null,
+            finish: form.get("finish") || null,
+            condition: form.get("condition") || null,
+            width_in: form.get("width_in") ? Number(form.get("width_in")) : null,
+            height_in: form.get("height_in") ? Number(form.get("height_in")) : null,
+            depth_in: form.get("depth_in") ? Number(form.get("depth_in")) : null,
             max_weight_kg: form.get("max_weight_kg") ? Number(form.get("max_weight_kg")) : null,
             is_climate_controlled: form.get("is_climate_controlled") === "on",
             is_uv_filtered: form.get("is_uv_filtered") === "on",
@@ -57,13 +59,19 @@ export function NewCaseForm() {
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <Field label="Code" name="code" required placeholder="G1-01" />
         <Field label="Name" name="name" required placeholder="Entrance Vitrine" />
-        <Field label="Location" name="location" placeholder="Gallery 1" />
+        <Field label="Location" name="location" placeholder="e.g. 2nd Fl. South Gallery" />
         <Field label="Description" name="description" placeholder="Optional" />
+        <Field label="Finish" name="finish" placeholder="e.g. White laminate pedestal" />
+        <Field label="Condition" name="condition" placeholder="e.g. Good" />
       </div>
+      <p className="text-xs text-black/50 dark:text-white/50">
+        Width/height/depth below are the effective size used for matching objects to this case - the
+        vitrine interior if enclosed, or the open deck footprint (leave height blank) if not.
+      </p>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <Field label="Width (cm)" name="width_cm" type="number" placeholder="Interior" />
-        <Field label="Height (cm)" name="height_cm" type="number" placeholder="Interior" />
-        <Field label="Depth (cm)" name="depth_cm" type="number" placeholder="Interior" />
+        <Field label="Width (in)" name="width_in" type="number" placeholder="Interior" />
+        <Field label="Height (in)" name="height_in" type="number" placeholder="Interior" />
+        <Field label="Depth (in)" name="depth_in" type="number" placeholder="Interior" />
         <Field label="Max weight (kg)" name="max_weight_kg" type="number" placeholder="Optional" />
       </div>
       <label className="flex items-center gap-2 text-sm">

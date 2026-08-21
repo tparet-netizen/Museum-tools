@@ -41,16 +41,21 @@ export default async function CaseDetailPage({
         <p className="mt-1 text-sm text-black/60 dark:text-white/60">
           {caseRow.location ?? "No location set"}
         </p>
+        {caseRow.finish && <p className="mt-2 text-sm">{caseRow.finish}</p>}
+        {caseRow.condition && (
+          <p className="mt-1 text-sm text-black/60 dark:text-white/60">Condition: {caseRow.condition}</p>
+        )}
         {caseRow.description && (
           <p className="mt-3 max-w-2xl text-sm">{caseRow.description}</p>
         )}
-        <dl className="mt-3 flex gap-6 text-sm text-black/60 dark:text-white/60">
-          {caseRow.width_cm && <div>W {caseRow.width_cm}cm</div>}
-          {caseRow.height_cm && <div>H {caseRow.height_cm}cm</div>}
-          {caseRow.depth_cm && <div>D {caseRow.depth_cm}cm</div>}
-          {caseRow.max_weight_kg && <div>Max {caseRow.max_weight_kg}kg</div>}
-        </dl>
+
         <div className="mt-3 flex flex-wrap gap-1.5 text-xs">
+          {caseRow.has_pedestal && (
+            <span className="rounded bg-black/10 px-1.5 py-0.5 dark:bg-white/10">Pedestal</span>
+          )}
+          {caseRow.has_vitrine && (
+            <span className="rounded bg-black/10 px-1.5 py-0.5 dark:bg-white/10">Vitrine (enclosed)</span>
+          )}
           {caseRow.is_climate_controlled && (
             <span className="rounded bg-black/10 px-1.5 py-0.5 dark:bg-white/10">Climate controlled</span>
           )}
@@ -58,6 +63,46 @@ export default async function CaseDetailPage({
             <span className="rounded bg-black/10 px-1.5 py-0.5 dark:bg-white/10">UV filtered</span>
           )}
         </div>
+
+        <dl className="mt-4 grid max-w-lg grid-cols-2 gap-x-6 gap-y-3 text-sm">
+          <div>
+            <dt className="text-black/50 dark:text-white/50">Used for matching</dt>
+            <dd className="text-black/80 dark:text-white/80">
+              {caseRow.width_in || caseRow.height_in || caseRow.depth_in
+                ? `${caseRow.width_in ?? "?"} × ${caseRow.height_in ?? "open"} × ${caseRow.depth_in ?? "?"} in`
+                : "Not enough confirmed dimensions yet"}
+              {caseRow.max_weight_kg ? `, max ${caseRow.max_weight_kg} kg` : ""}
+            </dd>
+          </div>
+          {caseRow.has_pedestal && (
+            <div>
+              <dt className="text-black/50 dark:text-white/50">Pedestal (H × W × D)</dt>
+              <dd className="text-black/80 dark:text-white/80">
+                {caseRow.pedestal_height_in ?? "?"} × {caseRow.pedestal_width_in ?? "?"} ×{" "}
+                {caseRow.pedestal_depth_in ?? "?"} in
+                {caseRow.display_deck_size ? ` · deck ${caseRow.display_deck_size}` : ""}
+              </dd>
+            </div>
+          )}
+          {caseRow.has_vitrine && (
+            <>
+              <div>
+                <dt className="text-black/50 dark:text-white/50">Vitrine exterior (H × L × D)</dt>
+                <dd className="text-black/80 dark:text-white/80">
+                  {caseRow.vitrine_ext_height_in ?? "?"} × {caseRow.vitrine_ext_length_in ?? "?"} ×{" "}
+                  {caseRow.vitrine_ext_depth_in ?? "?"} in
+                </dd>
+              </div>
+              <div>
+                <dt className="text-black/50 dark:text-white/50">Vitrine interior (H × W × D)</dt>
+                <dd className="text-black/80 dark:text-white/80">
+                  {caseRow.vitrine_int_height_in ?? "unknown"} × {caseRow.vitrine_int_width_in ?? "unknown"} ×{" "}
+                  {caseRow.vitrine_int_depth_in ?? "unknown"} in
+                </dd>
+              </div>
+            </>
+          )}
+        </dl>
       </div>
 
       <section>

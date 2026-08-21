@@ -12,11 +12,28 @@ export interface Case {
   code: string;
   name: string;
   location: string | null;
-  width_cm: number | null;
-  height_cm: number | null;
-  depth_cm: number | null;
   description: string | null;
   is_active: boolean;
+  finish: string | null;
+  condition: string | null;
+  // Effective box used for object-matching: vitrine interior if enclosed
+  // and known, else the open pedestal/deck footprint (height null - no
+  // ceiling). See migration 0005 for the full rationale.
+  width_in: number | null;
+  height_in: number | null;
+  depth_in: number | null;
+  has_pedestal: boolean;
+  pedestal_height_in: number | null;
+  pedestal_width_in: number | null;
+  pedestal_depth_in: number | null;
+  display_deck_size: string | null;
+  has_vitrine: boolean;
+  vitrine_ext_height_in: number | null;
+  vitrine_ext_length_in: number | null;
+  vitrine_ext_depth_in: number | null;
+  vitrine_int_height_in: number | null;
+  vitrine_int_width_in: number | null;
+  vitrine_int_depth_in: number | null;
   max_weight_kg: number | null;
   is_climate_controlled: boolean;
   is_uv_filtered: boolean;
@@ -36,9 +53,9 @@ export interface MuseumObject {
   id: string;
   name: string;
   description: string | null;
-  width_cm: number;
-  height_cm: number;
-  depth_cm: number;
+  width_in: number;
+  height_in: number;
+  depth_in: number;
   weight_kg: number | null;
   orientation_fixed: boolean;
   requires_climate_control: boolean;

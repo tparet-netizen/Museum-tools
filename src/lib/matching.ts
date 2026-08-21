@@ -2,9 +2,9 @@ import type { Case } from "@/lib/types";
 
 export interface MatchTarget {
   name: string;
-  width_cm: number;
-  height_cm: number;
-  depth_cm: number;
+  width_in: number;
+  height_in: number;
+  depth_in: number;
   weight_kg: number | null;
   orientation_fixed: boolean;
   requires_climate_control: boolean;
@@ -23,22 +23,25 @@ export interface MatchResult {
 }
 
 /**
- * Does target's box fit inside a case's interior box?
+ * Does target's box fit inside a case's box?
+ * width_in/depth_in (the footprint) are always required. height_in may be
+ * null - that means an open pedestal/platform with no enclosure, so there's
+ * no ceiling to check against; any object height is fine there.
  * If orientation_fixed, only the exact W/H/D mapping is tried. Otherwise
  * also tries rotating around the vertical axis (swap width/depth) - height
  * is never flipped, since laying most display objects on their side isn't
  * physically realistic.
  */
 function checkFit(target: MatchTarget, c: Case): "as-is" | "rotated" | null {
-  if (c.width_cm == null || c.height_cm == null || c.depth_cm == null) return null;
+  if (c.width_in == null || c.depth_in == null) return null;
+  const heightOk = (h: number) => c.height_in == null || h <= c.height_in;
 
-  const asIs =
-    target.width_cm <= c.width_cm && target.height_cm <= c.height_cm && target.depth_cm <= c.depth_cm;
+  const asIs = target.width_in <= c.width_in && heightOk(target.height_in) && target.depth_in <= c.depth_in;
   if (asIs) return "as-is";
 
   if (!target.orientation_fixed) {
     const rotated =
-      target.depth_cm <= c.width_cm && target.height_cm <= c.height_cm && target.width_cm <= c.depth_cm;
+      target.depth_in <= c.width_in && heightOk(target.height_in) && target.width_in <= c.depth_in;
     if (rotated) return "rotated";
   }
 
@@ -57,9 +60,9 @@ export function combineGroup(objects: MatchTarget[]): MatchTarget {
   const hasWeight = objects.some((o) => o.weight_kg != null);
   return {
     name: `Group of ${objects.length} objects`,
-    width_cm: objects.reduce((sum, o) => sum + o.width_cm, 0),
-    height_cm: Math.max(...objects.map((o) => o.height_cm)),
-    depth_cm: Math.max(...objects.map((o) => o.depth_cm)),
+    width_in: objects.reduce((sum, o) => sum + o.width_in, 0),
+    height_in: Math.max(...objects.map((o) => o.height_in)),
+    depth_in: Math.max(...objects.map((o) => o.depth_in)),
     weight_kg: hasWeight ? totalWeight : null,
     // A pre-arranged group's combined footprint isn't something to reorient.
     orientation_fixed: true,

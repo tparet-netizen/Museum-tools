@@ -52,6 +52,7 @@ export default async function CasesPage({
               </div>
               <div className="text-sm text-black/60 dark:text-white/60">
                 {c.location ?? "No location set"}
+                {c.finish ? ` · ${c.finish}` : ""}
               </div>
             </div>
             <span
